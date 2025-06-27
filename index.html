@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Notificações NOC</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Gerador de Notificações NOC</h1>
+
+        <div id="customAlertPopup" class="custom-alert-popup" style="display: none;">
+            <div class="custom-alert-content">
+                <span class="close-button" id="closeAlertPopup">&times;</span>
+                <h2>🔔 ALERTA NOC! 🔔</h2>
+                <p id="customAlertMessage">Hora de Postar a Atualização no Grupo!</p>
+                <button id="okAlertButton">OK, ENTENDIDO</button>
+            </div>
+        </div>
+        <div class="timer-section">
+            <h2>Timer de Alerta para Atualização</h2>
+            <div class="form-group">
+                <label for="timerDuracao">Duração do Timer (minutos):</label>
+                <input type="number" id="timerDuracao" value="30" min="1">
+            </div>
+            <div class="timer-controls">
+                <button id="iniciarTimer">Iniciar Timer</button>
+                <button id="pausarTimer" style="display: none;">Pausar Timer</button>
+                <button id="resetarTimer" style="display: none;">Resetar Timer</button>
+            </div>
+            <p id="tempoRestante">Tempo Restante: --:--</p>
+        </div>
+        <hr> <div class="form-group">
+            <label for="tipoNotificacao">Tipo de Notificação:</label>
+            <select id="tipoNotificacao">
+                <option value="">Selecione</option>
+                <option value="aberturaCrise">Crise - Abertura</option>
+                <option value="emAndamentoCrise">Crise - Em Andamento</option>
+                <option value="fechamentoCrise">Crise - Fechamento</option>
+                <option value="linkInternet">Link de Internet</option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label for="numeroIncidente">Número do Chamado (Neoservice):</label>
+            <input type="text" id="numeroIncidente" placeholder="Ex: TKT-01234567">
+            <button id="buscarDados">Buscar Dados (API)</button>
+        </div>
+
+        <div class="campos-crise">
+            <div class="form-group">
+                <label for="tituloCrise">Título da Crise (Ex: LENTIDÃO SAP - Enel):</label>
+                <input type="text" id="tituloCrise" placeholder="Ex: LENTIDÃO SAP - Enel - Lojas Enel">
+            </div>
+            <div class="form-group">
+                <label for="pasAfetadas">PA's Afetadas:</label>
+                <input type="text" id="pasAfetadas" placeholder="Ex: (300/300)">
+            </div>
+            <div class="form-group">
+                <label for="descricaoCrise">Descrição da Crise (da mensagem):</label>
+                <textarea id="descricaoCrise" rows="3" placeholder="Ex: posições de atendimento apresentam lentidão na utilização do SAP CRM"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="inicioCrise">Início (HH:MM):</label>
+                <input type="text" id="inicioCrise" placeholder="Ex: 10:22">
+            </div>
+        </div>
+
+        <div id="camposAberturaCrise" style="display: none;">
+            <div class="form-group">
+                <label for="linkConferencia">Link da Conferência:</label>
+                <input type="url" id="linkConferencia" placeholder="Ex: https://teams.microsoft.com/l/meetup-join...">
+            </div>
+        </div>
+
+        <div id="camposEmAndamentoCrise" style="display: none;">
+            <div class="form-group">
+                <label for="atualizacaoCrise">Atualização (uma por linha):</label>
+                <textarea id="atualizacaoCrise" rows="5" placeholder="Ex:&#10;10:50 - Identificado em monitoria...&#10;10:44 - André (N1 Redes) validou..."></textarea>
+            </div>
+        </div>
+
+        <div id="camposFechamentoCrise" style="display: none;">
+            <div class="form-group">
+                <label for="terminoCrise">Término (HH:MM):</label>
+                <input type="text" id="terminoCrise" placeholder="Ex: 10:52">
+            </div>
+            <div class="form-group">
+                <label for="duracaoCrise">Duração (HH:MM):</label>
+                <input type="text" id="duracaoCrise" placeholder="Ex: 00:30">
+            </div>
+            <div class="form-group">
+                <label for="causaDetectada">Causa detectada:</label>
+                <textarea id="causaDetectada" rows="2" placeholder="Ex: Identificado em monitoria alarme para host SAP CRM - elabzmenaa07"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="motivoCausa">Motivo da causa:</label>
+                <textarea id="motivoCausa" rows="2" placeholder="Ex: Problema de performance no servidor de aplicação SAP CRM - elabzmenaa07"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="solucaoAplicada">Solução Aplicada:</label>
+                <textarea id="solucaoAplicada" rows="2" placeholder="Ex: Realizado reboot do servidor"></textarea>
+            </div>
+            <div class="form-group">
+                <label for="participantesArea">Lista de Participantes/Área (um por linha):</label>
+                <textarea id="participantesArea" rows="3" placeholder="Ex:&#10;João (Analista GCO)&#10;André (N1 Redes)"></textarea>
+            </div>
+        </div>
+
+        <div id="camposLinkInternet" style="display: none;">
+            <div class="form-group">
+                <label for="tituloLink">Título do Link (Ex: Intermitência de Link RO057):</label>
+                <input type="text" id="tituloLink" placeholder="Ex: Intermitência de Link RO057">
+            </div>
+            <div class="form-group">
+                <label for="dataAberturaLink">Data Abertura (DD/MM/AAAA):</label>
+                <input type="text" id="dataAberturaLink" placeholder="Ex: 01/01/2025">
+            </div>
+            <div class="form-group">
+                <label for="horarioAberturaLink">Horário abertura (HHhMM):</label>
+                <input type="text" id="horarioAberturaLink" placeholder="Ex: 11h07">
+            </div>
+            <div class="form-group">
+                <label for="localidadeLink">Localidade:</label>
+                <input type="text" id="localidadeLink" placeholder="Ex: Pinheiros">
+            </div>
+            <div class="form-group">
+                <label for="interligacaoLink">Interligação:</label>
+                <input type="text" id="interligacaoLink" placeholder="Ex: Pinheiros (RO057)">
+            </div>
+            <div class="form-group">
+                <label for="designacaoLink">Designação:</label>
+                <input type="text" id="designacaoLink" placeholder="Ex: LP11000456 789 123">
+            </div>
+            <div class="form-group">
+                <label for="operadoraLink">Operadora:</label>
+                <input type="text" id="operadoraLink" placeholder="Ex: VIVO">
+            </div>
+            <div class="form-group">
+                <label for="protocoloLink">Protocolo:</label>
+                <input type="text" id="protocoloLink" placeholder="Ex: 20250101103356">
+            </div>
+            <div class="form-group">
+                <label for="ordemServicoLink">Ordem de Serviço:</label>
+                <input type="text" id="ordemServicoLink" placeholder="Ex: 604202">
+            </div>
+            <div class="form-group">
+                <label for="horarioChamadoOperadoraLink">Horário do chamado aberto junto a operadora (HHhMM):</label>
+                <input type="text" id="horarioChamadoOperadoraLink" placeholder="Ex: 11h10">
+            </div>
+            <div class="form-group">
+                <label for="nivelEscalonamentoLink">Nível de Escalonamento:</label>
+                <input type="text" id="nivelEscalonamentoLink" placeholder="Ex: 0800">
+            </div>
+            <div class="form-group">
+                <label for="slaLink">SLA:</label>
+                <input type="text" id="slaLink" placeholder="Ex: 4hrs">
+            </div>
+        </div>
+
+        <button id="gerarMensagem">Gerar Mensagem</button>
+        <button id="copiarMensagem">Copiar Mensagem</button>
+
+        <div class="output">
+            <h2>Mensagem Gerada:</h2>
+            <pre id="mensagemGerada"></pre>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
