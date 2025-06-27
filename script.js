@@ -173,6 +173,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const horarioChamadoOperadoraLink = document.getElementById('horarioChamadoOperadoraLink');
     const nivelEscalonamentoLink = document.getElementById('nivelEscalonamentoLink');
     const slaLink = document.getElementById('slaLink');
+    // NOVO CAMPO: Referência ao campo de atualização de link de internet
+    const atualizacaoLink = document.getElementById('atualizacaoLink'); 
+
 
     // Elementos de DIV para controlar visibilidade
     const camposCriseDiv = document.querySelector('.campos-crise');
@@ -331,8 +334,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 break;
 
             case 'linkInternet':
-                if (!tituloLink.value.trim() || !dataAberturaLink.value.trim() || !numeroIncidente.value.trim() || !horarioAberturaLink.value.trim() || !localidadeLink.value.trim() || !interligacaoLink.value.trim() || !designacaoLink.value.trim() || !operadoraLink.value.trim() || !protocoloLink.value.trim() || !ordemServicoLink.value.trim() || !horarioChamadoOperadoraLink.value.trim() || !nivelEscalonamentoLink.value.trim() || !slaLink.value.trim()) {
-                    alert('Por favor, preencha todos os campos para Notificação de Link de Internet.');
+                if (!tituloLink.value.trim() || !dataAberturaLink.value.trim() || !numeroIncidente.value.trim() || !horarioAberturaLink.value.trim() || !localidadeLink.value.trim() || !interligacaoLink.value.trim() || !designacaoLink.value.trim() || !operadoraLink.value.trim() || !protocoloLink.value.trim() || !ordemServicoLink.value.trim() || !horarioChamadoOperadoraLink.value.trim() || !nivelEscalonamentoLink.value.trim() || !slaLink.value.trim() || !atualizacaoLink.value.trim()) { // Adicionado validação para o novo campo
+                    alert('Por favor, preencha todos os campos para Notificação de Link de Internet, incluindo a Atualização.');
                     return;
                 }
                 mensagem = `${tituloLink.value.trim()}\n\n` +
@@ -348,7 +351,7 @@ document.addEventListener('DOMContentLoaded', () => {
                            `*Horário do chamado aberto junto a operadora:* ${horarioChamadoOperadoraLink.value.trim()}\n` +
                            `*Nível de Escalonamento:* ${nivelEscalonamentoLink.value.trim()}\n` +
                            `*SLA:* ${slaLink.value.trim()}\n\n` +
-                           `*Atualização:* Padrão de atualização em ordem cronológica`;
+                           `*Atualização:*\n${atualizacaoLink.value.trim()}`; // Usando o valor do novo campo
                 break;
 
             default:
