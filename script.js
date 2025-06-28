@@ -11,6 +11,7 @@ document.addEventListener('DOMContentLoaded', () => {
     let timerPausado = false;
     const somAlerta = new Audio('alarm.mp3'); 
     somAlerta.volume = 0.5; // Ajuste o volume, de 0.0 (mudo) a 1.0 (máximo)
+    somAlerta.loop = true; // Faz o áudio tocar em loop
 
     // --- Elementos do Popup Customizado ---
     const customAlertPopup = document.getElementById('customAlertPopup');
@@ -67,9 +68,14 @@ document.addEventListener('DOMContentLoaded', () => {
             if (tempoEmSegundos <= 0) {
                 clearInterval(timerInterval);
                 tempoRestanteDisplay.textContent = 'Tempo Esgotado!';
-                tocarAlerta(); // Toca o som primeiro
-                mostrarCustomPopupAlerta('🔔 ALERTA NOC: Hora de Postar a Atualização no Grupo! 🔔'); // Mostra o popup
-                resetarTimerBotoes(); // Reseta os botões para "Iniciar Timer"
+                
+                // Toca o som e mostra o popup customizado
+                mostrarCustomPopupAlerta('🔔 ALERTA NOC: Hora de Postar a Atualização no Grupo! 🔔');
+                
+                // Manda a notificação para o Windows
+                solicitarEShowNotification('ALERTA NOC!', 'Hora de Postar a Atualização no Grupo!'); 
+                
+                resetarTimerBotoes(); 
             }
         }, 1000);
         timerPausado = false;
@@ -109,10 +115,13 @@ document.addEventListener('DOMContentLoaded', () => {
     function mostrarCustomPopupAlerta(message) {
         customAlertMessage.textContent = message;
         customAlertPopup.style.display = 'flex'; // Mostra o popup
+        tocarAlerta(); // Garante que o som comece a tocar ao mostrar o popup
     }
 
     function esconderCustomPopupAlerta() {
         customAlertPopup.style.display = 'none'; // Esconde o popup
+        somAlerta.pause(); // Pausa o som quando o popup é fechado
+        somAlerta.currentTime = 0; // Volta o áudio para o início (opcional, para a próxima vez)
     }
 
     // Event Listeners para os botões do popup
@@ -124,6 +133,36 @@ document.addEventListener('DOMContentLoaded', () => {
             esconderCustomPopupAlerta();
         }
     });
+
+    // --- Nova função para solicitar e mostrar a notificação do sistema ---
+    function solicitarEShowNotification(title, body) {
+        // Verifica se o navegador suporta notificações
+        if (!("Notification" in window)) {
+            console.warn("Este navegador não suporta notificações de desktop.");
+            return;
+        }
+
+        // Verifica se a permissão já foi concedida
+        if (Notification.permission === "granted") {
+            new Notification(title, {
+                body: body,
+                icon: 'icone_noc.png' // Opcional: um ícone para a notificação. Crie este arquivo!
+            });
+        } else if (Notification.permission !== "denied") {
+            // Se ainda não foi negada, solicita a permissão
+            Notification.requestPermission().then(permission => {
+                if (permission === "granted") {
+                    new Notification(title, {
+                        body: body,
+                        icon: 'icone_noc.png' // Opcional: um ícone para a notificação
+                    });
+                } else {
+                    console.warn("Permissão para notificações negada ou não concedida.");
+                }
+            });
+        }
+    }
+
 
     // ... (restante dos Event Listeners do timer) ...
     iniciarTimerBtn.addEventListener('click', iniciarContagemRegressiva);
@@ -253,10 +292,14 @@ document.addEventListener('DOMContentLoaded', () => {
 
             if (data.callDate) {
                 const callDate = new Date(data.callDate);
-                inicioCrise.value = `${String(callDate.getHours()).padStart(2, '0')}:${String(callDate.getMinutes()).padStart(2, '0')}`;
+                // Extrai apenas a hora e minuto e formata
+                const hours = String(callDate.getHours()).padStart(2, '0');
+                const minutes = String(callDate.getMinutes()).padStart(2, '0');
+                inicioCrise.value = `${hours}:${minutes}`;
                 dataAberturaLink.value = `${String(callDate.getDate()).padStart(2, '0')}/${String(callDate.getMonth() + 1).padStart(2, '0')}/${callDate.getFullYear()}`;
-                horarioAberturaLink.value = `${String(callDate.getHours()).padStart(2, '0')}h${String(callDate.getMinutes()).padStart(2, '0')}`;
+                horarioAberturaLink.value = `${hours}h${minutes}`;
             }
+            
 
             if (data.briefDescription) {
                 tituloCrise.value = data.briefDescription;

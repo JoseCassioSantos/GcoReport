@@ -1,11 +1,14 @@
 body {
     font-family: Arial, sans-serif;
     background-color: #f4f4f4;
+    color: #333;
+    margin: 0;
+    padding: 20px;
     display: flex;
     justify-content: center;
-    align-items: center;
+    align-items: flex-start; /* Alinha no topo, para não centralizar o conteúdo grande */
     min-height: 100vh;
-    margin: 0;
+    box-sizing: border-box;
 }
 
 .container {
@@ -13,39 +16,44 @@ body {
     padding: 30px;
     border-radius: 8px;
     box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    max-width: 800px;
     width: 100%;
-    max-width: 600px;
+    margin-top: 20px; /* Espaço do topo */
 }
 
-h1 {
+h1, h2 {
+    color: #0056b3;
     text-align: center;
-    color: #333;
     margin-bottom: 25px;
 }
 
 .form-group {
-    margin-bottom: 15px;
+    margin-bottom: 18px;
 }
 
-label {
+.form-group label {
     display: block;
-    margin-bottom: 5px;
+    margin-bottom: 8px;
     font-weight: bold;
     color: #555;
 }
 
-input[type="text"],
-textarea,
-select {
-    width: calc(100% - 20px);
+.form-group input[type="text"],
+.form-group input[type="number"],
+.form-group input[type="url"],
+.form-group select,
+.form-group textarea {
+    width: calc(100% - 20px); /* 100% menos o padding */
     padding: 10px;
     border: 1px solid #ddd;
     border-radius: 4px;
-    font-size: 16px;
+    font-size: 1em;
+    box-sizing: border-box; /* Inclui padding e border na largura total */
 }
 
-textarea {
-    resize: vertical;
+.form-group textarea {
+    resize: vertical; /* Permite redimensionar verticalmente */
+    min-height: 60px; /* Altura mínima */
 }
 
 button {
@@ -53,81 +61,78 @@ button {
     color: white;
     padding: 12px 20px;
     border: none;
-    border-radius: 4px;
+    border-radius: 5px;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 1.1em;
+    margin-right: 10px; /* Espaço entre os botões */
+    transition: background-color 0.2s;
     margin-top: 10px;
-    margin-right: 10px;
 }
 
 button:hover {
     background-color: #0056b3;
 }
 
-#copiarMensagem {
-    background-color: #28a745; /* Verde para copiar */
+button#buscarDados {
+    background-color: #28a745; /* Cor diferente para "Buscar Dados" */
 }
 
-#copiarMensagem:hover {
+button#buscarDados:hover {
     background-color: #218838;
 }
 
+button#copiarMensagem {
+    background-color: #6c757d; /* Cor diferente para "Copiar" */
+}
+
+button#copiarMensagem:hover {
+    background-color: #5a6268;
+}
+
 .output {
-    margin-top: 30px;
-    padding: 15px;
     background-color: #e9ecef;
-    border-radius: 4px;
     border: 1px solid #ced4da;
+    border-radius: 5px;
+    padding: 15px;
+    margin-top: 30px;
 }
 
 .output h2 {
+    color: #0056b3;
     margin-top: 0;
-    color: #333;
-    font-size: 18px;
+    font-size: 1.3em;
 }
 
-#mensagemGerada {
-    white-space: pre-wrap; /* Preserva quebras de linha e espaços */
-    word-wrap: break-word;
-    font-size: 1rem;
+.output pre {
+    white-space: pre-wrap; /* Quebra linhas longas */
+    word-wrap: break-word; /* Quebra palavras longas */
+    font-family: 'Courier New', Courier, monospace;
+    font-size: 0.95em;
     color: #333;
 }
-
-/* Adicione estas classes ao seu style.css existente */
 
 .timer-section {
-    background-color: #e0f7fa; /* Um azul claro para a seção do timer */
+    background-color: #e6f2ff; /* Fundo mais claro para a seção do timer */
+    border: 1px solid #b3d9ff;
     padding: 20px;
     border-radius: 8px;
     margin-bottom: 25px;
-    border: 1px solid #b2ebf2;
     text-align: center;
 }
 
 .timer-section h2 {
-    color: #00796b; /* Um verde escuro */
+    color: #0056b3;
     margin-bottom: 15px;
 }
 
-.timer-section input[type="number"] {
-    width: 80px; /* Largura menor para o input de minutos */
-    text-align: center;
-    margin-right: 10px;
-}
-
 .timer-controls button {
-    background-color: #00bcd4; /* Azul para os botões do timer */
     margin: 5px;
 }
 
-.timer-controls button:hover {
-    background-color: #0097a7;
-}
-
 #tempoRestante {
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: bold;
-    color: #d32f2f; /* Vermelho para o tempo restante */
+    color: #d32f2f; /* Cor de destaque para o tempo */
     margin-top: 15px;
 }
 
@@ -137,7 +142,6 @@ hr {
     background-image: linear-gradient(to right, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.75), rgba(0, 0, 0, 0));
     margin: 30px 0;
 }
-
 
 /* Adicione estas novas regras ao final do seu style.css */
 
