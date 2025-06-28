@@ -70,10 +70,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 tempoRestanteDisplay.textContent = 'Tempo Esgotado!';
                 
                 // Toca o som e mostra o popup customizado
-                mostrarCustomPopupAlerta('🔔 ALERTA NOC: Hora de Postar a Atualização no Grupo! 🔔');
+                mostrarCustomPopupAlerta('🔔 ALERTA GCO: Hora de Postar a Atualização no Grupo! 🔔');
                 
                 // Manda a notificação para o Windows
-                solicitarEShowNotification('ALERTA NOC!', 'Hora de Postar a Atualização no Grupo!'); 
+                solicitarEShowNotification('ALERTA GCO!', 'Hora de Postar a Atualização no Grupo!'); 
                 
                 resetarTimerBotoes(); 
             }
